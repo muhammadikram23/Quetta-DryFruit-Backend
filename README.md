@@ -34,6 +34,31 @@
 
 ---
 
+## 📚 Table of Contents
+
+- [📖 About The Project](#-about-the-project)
+- [🎯 Project Goals](#-project-goals)
+- [✨ Key Features](#-key-features)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [🏗️ System Architecture](#️-system-architecture)
+- [📁 Project Structure](#-project-structure)
+- [🚀 Getting Started](#-getting-started)
+- [🔐 Environment Variables](#-environment-variables)
+- [📡 API Endpoints](#-api-endpoints)
+- [🔄 REST API Design](#-rest-api-design)
+- [☁️ Deployment](#️-deployment)
+- [🗄️ Railway MySQL](#️-railway-mysql)
+- [🌐 Live Deployment](#-live-deployment)
+- [🔗 Frontend Integration](#-frontend-integration)
+- [🌍 CORS Configuration](#-cors-configuration)
+- [🔒 Security Considerations](#-security-considerations)
+- [🧪 API Testing](#-api-testing)
+- [📈 Future Improvements](#-future-improvements)
+- [🤝 Contributing](#-contributing)
+- [👨‍💻 About the Developer](#-about-the-developer)
+- [🎓 Educational Project & License](#-educational-project--license)
+- [⭐ Project Highlights](#-project-highlights)
+
 ## 📖 About The Project
 
 **Quetta Dry Fruits Backend** is the backend component of a full-stack e-commerce application developed for managing and selling dry-fruit products.
@@ -584,14 +609,33 @@ Then open a Pull Request.
 
 ---
 
-# 👨‍💻 Author
+# 👨‍💻 About the Developer
 
-**Muhammad Ikram**
+### Muhammad Ikram
 
-GitHub:
-https://github.com/muhammadikram23
+I am a **Computer Science student and aspiring Full-Stack Web Developer** with an interest in building practical web applications, RESTful APIs, database-driven systems, and modern software solutions.
 
----
+This project represents my practical implementation of backend development concepts as part of a complete full-stack e-commerce application. Through this project, I worked with **Node.js, Express.js, REST APIs, MySQL, cloud database infrastructure, and Vercel deployment**.
+
+### 🔗 Connect With Me
+
+<p align="center">
+  <a href="https://github.com/muhammadikram23">
+    <img src="https://img.shields.io/badge/GitHub-muhammadikram23-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
+  </a>
+  <a href="YOUR_LINKEDIN_URL">
+    <img src="https://img.shields.io/badge/LinkedIn-Muhammad%20Ikram-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+  </a>
+</p>
+
+### 📌 Project Links
+
+| Resource | Link |
+|---|---|
+| 💻 GitHub Profile | [Muhammad Ikram](https://github.com/muhammadikram23) |
+| 📦 Backend Repository | [Quetta Dry Fruits Backend](https://github.com/muhammadikram23/Quetta-DryFruit-Backend) |
+| 🚀 Live Backend API | [Vercel Deployment](https://quetta-dry-fruit-backend.vercel.app) |
+| 💼 LinkedIn | [Muhammad Ikram](www.linkedin.com/in/muhammad-ikram-085823350) |
 
 # 🎓 Educational Project & License
 
