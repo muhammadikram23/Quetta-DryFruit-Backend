@@ -1,37 +1,61 @@
 # 🛒 Quetta Dry Fruits — Backend API
 
-A production-ready **RESTful backend API** for the Quetta Dry Fruits e-commerce platform, built with **Node.js, Express.js, and MySQL**. The application provides APIs for product management, inventory, orders, transactions, and administrative operations.
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Express.js-REST%20API-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
+  <img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/Railway-Database%20Hosting-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway" />
+  <img src="https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+</p>
 
-The backend is deployed on **Vercel Serverless Infrastructure** and uses a hosted **Railway MySQL database** for persistent data storage.
+<p align="center">
+  <img src="https://img.shields.io/badge/API-RESTful-FF6F00?style=flat-square" alt="REST API" />
+  <img src="https://img.shields.io/badge/Architecture-Serverless-5E5CE6?style=flat-square" alt="Serverless" />
+  <img src="https://img.shields.io/badge/Status-Active-success?style=flat-square" alt="Project Status" />
+  <img src="https://img.shields.io/badge/Project-Educational-blue?style=flat-square" alt="Educational Project" />
+</p>
+
+<p align="center">
+  <strong>Production-deployed RESTful backend API for the Quetta Dry Fruits e-commerce platform.</strong>
+</p>
+
+<p align="center">
+  Built with Node.js, Express.js, and MySQL • Hosted on Vercel • Powered by Railway MySQL
+</p>
+
+<p align="center">
+  <a href="https://quetta-dry-fruit-backend.vercel.app">
+    <img src="https://img.shields.io/badge/🚀_Live_API-Visit%20Deployment-000000?style=for-the-badge" alt="Live API" />
+  </a>
+  <a href="https://github.com/muhammadikram23/Quetta-DryFruit-Backend">
+    <img src="https://img.shields.io/badge/💻_GitHub-Repository-181717?style=for-the-badge&logo=github" alt="GitHub Repository" />
+  </a>
+</p>
 
 ---
 
-## 📌 Table of Contents
+## 📖 About The Project
 
-* [Overview](#-overview)
-* [Key Features](#-key-features)
-* [Technology Stack](#-technology-stack)
-* [System Architecture](#-system-architecture)
-* [Project Structure](#-project-structure)
-* [Getting Started](#-getting-started)
-* [Environment Variables](#-environment-variables)
-* [API Endpoints](#-api-endpoints)
-* [Deployment](#-deployment)
-* [Live API](#-live-api)
-* [CORS Configuration](#-cors-configuration)
-* [Security Considerations](#-security-considerations)
-* [Future Improvements](#-future-improvements)
-* [License](#-license)
+**Quetta Dry Fruits Backend** is the backend component of a full-stack e-commerce application developed for managing and selling dry-fruit products.
 
----
+The application provides a **RESTful API** that handles product management, inventory operations, customer orders, and database communication. It is designed to serve as the server-side layer between a modern frontend application and a relational MySQL database.
 
-## 📖 Overview
+The backend is built using **Node.js and Express.js**, uses **MySQL** for persistent data storage, and is deployed on **Vercel** with a hosted **Railway MySQL** database.
 
-**Quetta Dry Fruits Backend** is the server-side component of an e-commerce application designed for managing and selling dry-fruit products.
+### 🎯 Project Goals
 
-The backend follows a RESTful API architecture and separates application logic from the frontend. It communicates with a MySQL database to provide persistent storage for products, inventory, orders, and transaction-related information.
+The primary goals of this project are to demonstrate practical implementation of:
 
-The API is designed to integrate with modern frontend applications such as **React** or **Next.js**.
+* RESTful API development
+* Backend architecture using Node.js and Express.js
+* Relational database integration using MySQL
+* CRUD operations
+* Server-side application development
+* Environment-based configuration
+* Cloud database integration
+* Serverless deployment
+* Frontend-backend communication
+* Full-stack application architecture
 
 ---
 
@@ -39,115 +63,121 @@ The API is designed to integrate with modern frontend applications such as **Rea
 
 ### 🛍️ Product Management
 
-* Retrieve all available products
-* Retrieve individual products by ID
+* Retrieve all products
+* Retrieve individual products
 * Create new products
-* Update existing product information
+* Update product information
 * Delete products
-* Manage product inventory and stock information
+* Manage inventory and stock information
 
 ### 📦 Order Management
 
 * Create customer orders
 * Retrieve order information
-* Track customer purchases
-* Maintain order-related database records
+* Store purchase records
+* Manage order-related data
 
-### 👨‍💼 Administrative Operations
-
-* Dedicated endpoints for administrative product and inventory operations
-* Backend-ready structure for authentication and authorization
-* Separation between public and administrative API operations
-
-### 🗄️ Database Integration
+### 🗄️ Database Management
 
 * MySQL relational database
-* `mysql2` driver
+* `mysql2` database driver
 * Connection pooling
-* Railway-hosted database
+* Railway-hosted production database
 * Environment-based database configuration
 
-### 🌐 API & CORS
+### 🌐 RESTful API
 
-* RESTful API architecture
-* JSON request and response handling
-* CORS configuration for frontend integration
-* HTTP status codes for API responses
+* Standard HTTP methods
+* JSON request and response format
+* Structured API endpoints
+* HTTP status codes
+* CORS support
+* Frontend integration ready
 
-### ☁️ Serverless Deployment
+### ☁️ Cloud Deployment
 
-* Deployed using Vercel
-* Express.js application configured for serverless execution
-* Environment variables managed through Vercel
-* Railway used for hosted MySQL persistence
-
----
-
-## 🛠️ Technology Stack
-
-| Technology       | Purpose                            |
-| ---------------- | ---------------------------------- |
-| **Node.js**      | JavaScript runtime                 |
-| **Express.js**   | REST API framework                 |
-| **MySQL**        | Relational database                |
-| **mysql2**       | MySQL database driver              |
-| **Vercel**       | Backend/serverless deployment      |
-| **Railway**      | Hosted MySQL database              |
-| **CORS**         | Cross-origin request handling      |
-| **dotenv**       | Environment variable management    |
-| **Git & GitHub** | Version control and source hosting |
+* Deployed on Vercel
+* Serverless backend architecture
+* Railway MySQL database
+* Production environment variables
+* Publicly accessible API
 
 ---
 
-## 🏗️ System Architecture
+# 🛠️ Tech Stack
+
+| Technology          | Purpose                         |
+| ------------------- | ------------------------------- |
+| 🟢 **Node.js**      | JavaScript runtime              |
+| ⚡ **Express.js**    | Backend web framework           |
+| 🐬 **MySQL**        | Relational database             |
+| 🔌 **mysql2**       | MySQL database driver           |
+| 🚀 **Vercel**       | Backend deployment              |
+| 🚂 **Railway**      | MySQL database hosting          |
+| 🌍 **CORS**         | Cross-origin API communication  |
+| 🔐 **dotenv**       | Environment variable management |
+| 🐙 **Git & GitHub** | Version control                 |
+
+---
+
+# 🏗️ System Architecture
 
 ```text
-                    ┌──────────────────────────┐
-                    │      Frontend App         │
-                    │    React / Next.js        │
-                    └────────────┬─────────────┘
-                                 │
-                                 │ HTTPS / REST API
-                                 ▼
-                    ┌──────────────────────────┐
-                    │      Vercel Hosting       │
-                    │                          │
-                    │   Express.js Backend     │
-                    │   Serverless Functions   │
-                    └────────────┬─────────────┘
-                                 │
-                                 │ MySQL Connection
-                                 ▼
-                    ┌──────────────────────────┐
-                    │    Railway MySQL DB      │
-                    │                          │
-                    │ Products • Orders • Data │
-                    └──────────────────────────┘
+┌─────────────────────────────────────┐
+│          Frontend Application       │
+│          React / Next.js            │
+└──────────────────┬──────────────────┘
+                   │
+                   │ HTTPS / REST API
+                   ▼
+┌─────────────────────────────────────┐
+│              Vercel                 │
+│                                     │
+│        Express.js Backend           │
+│        Serverless Functions         │
+└──────────────────┬──────────────────┘
+                   │
+                   │ MySQL Connection
+                   ▼
+┌─────────────────────────────────────┐
+│             Railway                 │
+│                                     │
+│          MySQL Database             │
+│                                     │
+│ Products • Orders • Inventory       │
+└─────────────────────────────────────┘
 ```
 
-### Request Flow
+### 🔄 Request Flow
 
 ```text
-Client Request
-      ↓
+Client
+  │
+  ▼
+HTTP Request
+  │
+  ▼
 Express.js Route
-      ↓
-Controller / Business Logic
-      ↓
+  │
+  ▼
+Business Logic
+  │
+  ▼
 MySQL Query
-      ↓
-Railway MySQL Database
-      ↓
+  │
+  ▼
+Railway MySQL
+  │
+  ▼
 JSON Response
-      ↓
-Frontend
+  │
+  ▼
+Client
 ```
 
 ---
 
-## 📁 Project Structure
-
-A typical project structure is organized as follows:
+# 📁 Project Structure
 
 ```text
 Quetta-DryFruit-Backend/
@@ -174,24 +204,22 @@ Quetta-DryFruit-Backend/
 └── README.md
 ```
 
-> The exact structure may vary depending on the current implementation of the repository.
+> The exact folder structure may vary depending on the current implementation of the repository.
 
 ---
 
 # 🚀 Getting Started
 
-Follow the steps below to run the backend locally.
-
 ## Prerequisites
 
-Make sure the following software is installed:
+Before running the project locally, make sure you have:
 
 * **Node.js 18+**
 * **npm 9+**
 * **Git**
-* MySQL database
+* **MySQL**
 
-You can use either:
+You can use:
 
 * Local MySQL
 * XAMPP
@@ -200,21 +228,17 @@ You can use either:
 
 ---
 
-## 1. Clone the Repository
+## 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/muhammadikram23/Quetta-DryFruit-Backend.git
-```
 
-Navigate into the project:
-
-```bash
 cd Quetta-DryFruit-Backend
 ```
 
 ---
 
-## 2. Install Dependencies
+## 2️⃣ Install Dependencies
 
 ```bash
 npm install
@@ -222,9 +246,9 @@ npm install
 
 ---
 
-## 3. Configure Environment Variables
+## 3️⃣ Configure Environment Variables
 
-Create a `.env` file in the root directory:
+Create a `.env` file in the project root:
 
 ```env
 PORT=5000
@@ -236,9 +260,11 @@ MYSQLPASSWORD=your_database_password
 MYSQLDATABASE=your_database_name
 ```
 
-> **Important:** Never commit your `.env` file or database credentials to GitHub.
+### ⚠️ Important
 
-Add `.env` to `.gitignore`:
+Never commit your `.env` file to GitHub.
+
+Your `.gitignore` should contain:
 
 ```gitignore
 .env
@@ -247,9 +273,7 @@ node_modules/
 
 ---
 
-## 4. Start the Development Server
-
-If the project provides a development script:
+## 4️⃣ Start the Development Server
 
 ```bash
 npm run dev
@@ -261,7 +285,7 @@ Or:
 npm start
 ```
 
-The local API will be available at:
+The local backend will run at:
 
 ```text
 http://localhost:5000
@@ -271,38 +295,22 @@ http://localhost:5000
 
 # 🔐 Environment Variables
 
-The backend uses environment variables to keep configuration and credentials outside the source code.
+| Variable        | Description         | Example             |
+| --------------- | ------------------- | ------------------- |
+| `PORT`          | Backend server port | `5000`              |
+| `MYSQLHOST`     | MySQL hostname      | `localhost`         |
+| `MYSQLPORT`     | MySQL port          | `3306`              |
+| `MYSQLUSER`     | MySQL username      | `root`              |
+| `MYSQLPASSWORD` | MySQL password      | `********`          |
+| `MYSQLDATABASE` | Database name       | `quetta_dry_fruits` |
 
-| Variable        | Description           | Example     |
-| --------------- | --------------------- | ----------- |
-| `PORT`          | Application port      | `5000`      |
-| `MYSQLHOST`     | MySQL server hostname | `localhost` |
-| `MYSQLPORT`     | MySQL server port     | `3306`      |
-| `MYSQLUSER`     | MySQL username        | `root`      |
-| `MYSQLPASSWORD` | MySQL password        | `********`  |
-| `MYSQLDATABASE` | Database name         | `railway`   |
-
-### Example
-
-```env
-PORT=5000
-
-MYSQLHOST=localhost
-MYSQLPORT=3306
-MYSQLUSER=root
-MYSQLPASSWORD=your_password
-MYSQLDATABASE=quetta_dry_fruits
-```
-
-For production, these values should be configured through the **Vercel Project Settings → Environment Variables** section rather than committed to the repository.
+For production, configure these values through the Vercel dashboard rather than committing credentials to the repository.
 
 ---
 
 # 📡 API Endpoints
 
-The following endpoints represent the backend API structure.
-
-## 🛍️ Products API
+## 🛍️ Products
 
 | Method   | Endpoint            | Description                 |
 | -------- | ------------------- | --------------------------- |
@@ -312,13 +320,13 @@ The following endpoints represent the backend API structure.
 | `PUT`    | `/api/products/:id` | Update an existing product  |
 | `DELETE` | `/api/products/:id` | Delete a product            |
 
-### Example Request
+### Example
 
 ```http
 GET /api/products
 ```
 
-### Example Response
+Example response:
 
 ```json
 {
@@ -329,21 +337,19 @@ GET /api/products
 
 ---
 
-## 📦 Orders API
+## 📦 Orders
 
-| Method | Endpoint      | Description                 |
-| ------ | ------------- | --------------------------- |
-| `GET`  | `/api/orders` | Retrieve customer orders    |
-| `POST` | `/api/orders` | Create a new customer order |
+| Method | Endpoint      | Description              |
+| ------ | ------------- | ------------------------ |
+| `GET`  | `/api/orders` | Retrieve customer orders |
+| `POST` | `/api/orders` | Create a customer order  |
 
-### Example Request
+Example:
 
 ```http
 POST /api/orders
 Content-Type: application/json
 ```
-
-Example request body:
 
 ```json
 {
@@ -355,28 +361,28 @@ Example request body:
 
 ---
 
-# 🔄 REST API Architecture
+# 🔄 REST API Design
 
-The backend follows standard HTTP methods:
+The backend follows conventional REST principles:
 
-| HTTP Method | Purpose            |
-| ----------- | ------------------ |
-| `GET`       | Retrieve resources |
-| `POST`      | Create resources   |
-| `PUT`       | Update resources   |
-| `DELETE`    | Delete resources   |
+| HTTP Method | Operation     |
+| ----------- | ------------- |
+| `GET`       | Retrieve data |
+| `POST`      | Create data   |
+| `PUT`       | Update data   |
+| `DELETE`    | Delete data   |
 
-API responses are returned in **JSON format**, allowing the backend to communicate easily with web and mobile clients.
+All API responses are designed to use **JSON**, making the backend compatible with modern web and mobile clients.
 
 ---
 
 # ☁️ Deployment
 
-## Vercel Deployment
+## 🚀 Vercel
 
-The backend is deployed on **Vercel**.
+The backend is deployed using **Vercel Serverless Infrastructure**.
 
-A typical Vercel configuration can be defined using `vercel.json`:
+A typical `vercel.json` configuration is:
 
 ```json
 {
@@ -396,21 +402,21 @@ A typical Vercel configuration can be defined using `vercel.json`:
 }
 ```
 
-### Deployment Steps
+### Deployment Process
 
 1. Push the backend repository to GitHub.
 2. Import the repository into Vercel.
-3. Configure the required environment variables.
-4. Deploy the project.
-5. Verify the production API endpoints.
+3. Configure production environment variables.
+4. Deploy the application.
+5. Test the deployed API endpoints.
 
 ---
 
-## 🗄️ Railway MySQL Configuration
+# 🗄️ Railway MySQL
 
-The production database is hosted using Railway.
+The production database is hosted on **Railway MySQL**.
 
-Vercel environment variables should contain the Railway database connection information:
+Production database credentials are supplied to Vercel through environment variables:
 
 ```env
 MYSQLHOST=your_railway_host
@@ -420,41 +426,31 @@ MYSQLPASSWORD=your_railway_password
 MYSQLDATABASE=your_railway_database
 ```
 
-### ⚠️ Security Note
+### 🔒 Security
 
-Never publish actual database credentials inside:
-
-* `README.md`
-* GitHub source code
-* Screenshots
-* Public documentation
-* Frontend JavaScript
-
-Only environment variable **names** should be documented publicly.
+Actual database credentials should **never** be placed inside the README or committed to GitHub.
 
 ---
 
-# 🌐 Live API
+# 🌐 Live Deployment
 
-The production backend is deployed at:
+### 🚀 Production API
 
 **https://quetta-dry-fruit-backend.vercel.app**
 
-Example:
+Example API request:
 
 ```text
 https://quetta-dry-fruit-backend.vercel.app/api/products
 ```
 
-The live API can be consumed by the project's frontend or any HTTP client capable of making REST requests.
-
 ---
 
 # 🔗 Frontend Integration
 
-The backend can be consumed from a React or Next.js application using `fetch()` or libraries such as Axios.
+The backend can be consumed by React, Next.js, or other frontend applications.
 
-Example:
+### Example using Fetch API
 
 ```javascript
 const response = await fetch(
@@ -466,15 +462,15 @@ const data = await response.json();
 console.log(data);
 ```
 
-This architecture keeps the frontend and backend independently deployable while allowing them to communicate through HTTP-based REST APIs.
+This separation allows the frontend and backend to be independently developed, tested, deployed, and maintained.
 
 ---
 
 # 🌍 CORS Configuration
 
-Cross-Origin Resource Sharing is configured to allow the frontend application to communicate with the backend API from a different origin.
+The backend supports Cross-Origin Resource Sharing (CORS), allowing frontend applications hosted on different domains to communicate with the API.
 
-A typical Express configuration is:
+A basic Express configuration is:
 
 ```javascript
 const cors = require("cors");
@@ -482,7 +478,7 @@ const cors = require("cors");
 app.use(cors());
 ```
 
-For production applications, CORS should ideally be restricted to trusted frontend origins:
+For a production environment, CORS should preferably be restricted to trusted frontend domains:
 
 ```javascript
 app.use(
@@ -496,53 +492,30 @@ app.use(
 
 # 🔒 Security Considerations
 
-The following practices are recommended for production:
+For a production-grade deployment, the following security practices are recommended:
 
-* Store credentials in environment variables.
-* Never expose MySQL credentials to the frontend.
-* Never commit `.env` files.
-* Validate incoming request data.
-* Use parameterized SQL queries to prevent SQL injection.
-* Restrict CORS to trusted origins.
-* Implement authentication for administrative endpoints.
-* Implement authorization and role-based access control.
-* Use HTTPS in production.
-* Add centralized error handling.
-* Apply rate limiting to public APIs where appropriate.
-
----
-
-# 📈 Future Improvements
-
-Potential improvements for future versions include:
-
-* 🔐 JWT-based authentication
-* 👤 Customer account management
-* 🛡️ Role-based authorization
-* 🛒 Shopping cart API
-* 💳 Payment gateway integration
-* 📦 Advanced inventory management
-* 📊 Admin dashboard APIs
-* 🔍 Product search and filtering
-* 📄 Pagination for large datasets
-* 🧾 Order status tracking
-* 📧 Email notifications
-* 📝 API documentation with Swagger/OpenAPI
-* 🚦 API rate limiting
-* 🧪 Automated unit and integration testing
-* 📋 Request validation using a validation library
-* 📊 Production logging and monitoring
+* 🔐 Keep database credentials in environment variables.
+* 🚫 Never expose database credentials to the frontend.
+* 🛡️ Validate incoming request data.
+* 💉 Use parameterized SQL queries to prevent SQL injection.
+* 🌐 Restrict CORS to trusted domains.
+* 👤 Implement authentication for administrative operations.
+* 🔑 Implement authorization and role-based access control.
+* 🔒 Use HTTPS in production.
+* 🚦 Implement API rate limiting.
+* 📝 Add centralized error handling.
+* 📊 Implement logging and monitoring.
 
 ---
 
-# 🧪 Testing the API
+# 🧪 API Testing
 
-You can test the API using tools such as:
+The API can be tested using:
 
-* Postman
-* Insomnia
-* Thunder Client
-* cURL
+* **Postman**
+* **Insomnia**
+* **Thunder Client**
+* **cURL**
 * Frontend applications
 
 Example:
@@ -553,32 +526,55 @@ curl https://quetta-dry-fruit-backend.vercel.app/api/products
 
 ---
 
+# 📈 Future Improvements
+
+Potential future enhancements include:
+
+* 🔐 JWT authentication
+* 👤 Customer authentication
+* 🛡️ Role-based authorization
+* 🛒 Shopping cart APIs
+* 💳 Payment gateway integration
+* 📦 Advanced inventory management
+* 📊 Admin dashboard
+* 🔍 Product search and filtering
+* 📄 API pagination
+* 🧾 Order status management
+* 📧 Email notifications
+* 📚 Swagger / OpenAPI documentation
+* 🧪 Automated testing
+* 🚦 API rate limiting
+* 📊 Production monitoring and logging
+
+---
+
 # 🤝 Contributing
 
-Contributions and improvements are welcome.
+Although this is primarily an educational project, contributions, suggestions, and improvements are welcome.
 
-To contribute:
+### Fork the repository
 
 ```bash
 git clone https://github.com/muhammadikram23/Quetta-DryFruit-Backend.git
+
 cd Quetta-DryFruit-Backend
-npm install
 ```
 
-Create a feature branch:
+### Create a feature branch
 
 ```bash
 git checkout -b feature/your-feature
 ```
 
-Commit your changes:
+### Commit your changes
 
 ```bash
 git add .
+
 git commit -m "Add your feature"
 ```
 
-Push the branch:
+### Push the branch
 
 ```bash
 git push origin feature/your-feature
@@ -597,32 +593,52 @@ https://github.com/muhammadikram23
 
 ---
 
-# 📄 License
+# 🎓 Educational Project & License
+
+This project is an **educational full-stack web development project**, specifically the **backend component** of the Quetta Dry Fruits e-commerce application.
+
+It was developed as the **final project for the AI & Web Development program**, offered through **Balochistan Youth Empowerment — Digital Balochistan**, by the **Digital Transformation Awareness Network (DTAN)**.
+
+The project was created for educational and practical learning purposes, with the objective of applying concepts and technologies related to:
+
+* Full-stack web development
+* Backend API development
+* RESTful architecture
+* Database management
+* Cloud deployment
+* Web application architecture
+* AI & modern digital technologies
+
+### 📄 License
 
 This project is licensed under the **MIT License**.
 
-See the `LICENSE` file in the repository for complete license information.
+The MIT License permits the use, modification, and distribution of this project subject to the terms and conditions defined in the `LICENSE` file.
+
+**Educational Project — AI & Web Development Final Project**
+**Balochistan Youth Empowerment — Digital Balochistan**
+**Digital Transformation Awareness Network (DTAN)**
 
 ---
 
-## ⭐ Project Summary
-
-**Quetta Dry Fruits Backend** demonstrates the development and deployment of a production-oriented REST API using:
+# ⭐ Project Highlights
 
 ```text
-Node.js
-   ↓
-Express.js
-   ↓
-RESTful API
-   ↓
-MySQL
-   ↓
-Railway
-   ↓
-Vercel
+🛒 E-Commerce Backend
+        │
+        ├── Node.js
+        ├── Express.js
+        ├── RESTful APIs
+        ├── MySQL
+        ├── Railway
+        └── Vercel
+              │
+              ▼
+       Production Deployment
 ```
 
-The project provides a scalable foundation for an e-commerce platform while maintaining a clear separation between the **frontend, backend API, and database layers**.
+> **Quetta Dry Fruits Backend** demonstrates the practical implementation of a full-stack application's server-side architecture, from REST API development and relational database integration to cloud deployment.
 
-If you find this project useful, consider giving the repository a ⭐ on GitHub.
+<p align="center">
+  <strong>Built for learning • Built for practice • Built for the future 🚀</strong>
+</p>
