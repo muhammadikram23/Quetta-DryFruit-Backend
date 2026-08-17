@@ -78,15 +78,15 @@ router.post('/', async (req, res) => {
       { role: 'user', parts: [{ text: message }] }
     ];
 
-    // Priority list of standard active models
+    // ✅ Verified active models directly from your API response
     const candidateModels = [
       'gemini-2.5-flash',
-      'gemini-1.5-flash',
+      'gemini-3.5-flash',
+      'gemini-3.7-flash',
       'gemini-flash-latest'
     ];
 
     let lastError = null;
-    let isQuotaExceeded = false;
 
     for (const model of candidateModels) {
       try {
@@ -99,7 +99,7 @@ router.post('/', async (req, res) => {
             contents: contents,
             generationConfig: { temperature: 0.7 }
           },
-          { headers: { 'Content-Type': 'application/json' }, timeout: 10000 }
+          { headers: { 'Content-Type': 'application/json' }, timeout: 12000 }
         );
 
         const reply = apiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -109,21 +109,8 @@ router.post('/', async (req, res) => {
       } catch (err) {
         lastError = err.response?.data || err.message;
         const statusCode = err.response?.status;
-
-        if (statusCode === 429) {
-          isQuotaExceeded = true;
-          console.warn(`Quota limit reached (429) for model ${model}.`);
-        } else {
-          console.warn(`Model ${model} failed with status ${statusCode}:`, JSON.stringify(lastError));
-        }
+        console.warn(`Model ${model} failed (${statusCode}):`, JSON.stringify(lastError));
       }
-    }
-
-    if (isQuotaExceeded) {
-      return res.status(429).json({
-        error: 'Quota Exceeded',
-        message: 'API rate limit or daily quota reached. Please wait a moment or update your Google Gemini API key.'
-      });
     }
 
     return res.status(500).json({
