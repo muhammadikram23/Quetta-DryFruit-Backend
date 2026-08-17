@@ -1,11 +1,7 @@
 const express = require('express');
 const { GoogleGenAI } = require('@google/genai');
-require('dotenv').config();
 
 const router = express.Router();
-
-// Initialize Gemini Client
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const STORE_SYSTEM_INSTRUCTION = `
 You are "Quetta Dry Fruits AI Assistant", a friendly, helpful sales expert for an online dry fruit store based in Quetta, Pakistan.
@@ -27,6 +23,15 @@ Guidelines:
 
 router.post('/chat', async (req, res) => {
   try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.error('GEMINI_API_KEY is not defined in environment variables.');
+      return res.status(500).json({ error: 'Server configuration error: Missing API Key.' });
+    }
+
+    // Initialize inside handler for Vercel Serverless environment safety
+    const ai = new GoogleGenAI({ apiKey });
+
     const { message, conversationHistory } = req.body;
 
     if (!message || typeof message !== 'string') {
@@ -58,10 +63,9 @@ router.post('/chat', async (req, res) => {
     return res.json({ reply });
 
   } catch (error) {
-    console.error('Gemini API Error:', error);
-    return res.status(500).json({ error: 'Failed to process request with AI.' });
+    console.error('Gemini API Error details:', error);
+    return res.status(500).json({ error: 'Failed to process request with AI.', details: error.message });
   }
 });
 
-// IMPORTANT: Must use CommonJS export
 module.exports = router;
