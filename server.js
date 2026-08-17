@@ -1,45 +1,52 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+
 const db = require('./db');
+const chatRouter = require('./routes/chat');
 
 const app = express();
+
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// 1. GET all products (For Storefront & Admin Dashboard)
+// Register Chat Router
+app.use('/api', chatRouter);
+
+// 1. GET all products
 app.get('/api/products', async (req, res) => {
-    try {
-        const [rows] = await db.query('SELECT * FROM products ORDER BY id DESC');
-        res.json(rows);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    const [rows] = await db.query('SELECT * FROM products ORDER BY id DESC');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // 2. GET single product by ID
 app.get('/api/products/:id', async (req, res) => {
-    try {
-        const [rows] = await db.query('SELECT * FROM products WHERE id = ?', [req.params.id]);
-        if (rows.length === 0) return res.status(404).json({ message: 'Product not found' });
-        res.json(rows[0]);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    const [rows] = await db.query('SELECT * FROM products WHERE id = ?', [req.params.id]);
+    if (rows.length === 0) return res.status(404).json({ message: 'Product not found' });
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// 3. GET Low Stock Alerts (For Admin Dashboard Alert)
+// 3. GET Low Stock Alerts
 app.get('/api/products/alerts/low-stock', async (req, res) => {
-    try {
-        const threshold = req.query.threshold || 10;
-        const [rows] = await db.query('SELECT * FROM products WHERE stock_kg <= ?', [threshold]);
-        res.json({ alert_count: rows.length, low_stock_items: rows });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    const threshold = req.query.threshold || 10;
+    const [rows] = await db.query('SELECT * FROM products WHERE stock_kg <= ?', [threshold]);
+    res.json({ alert_count: rows.length, low_stock_items: rows });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// 4. POST Add New Product (Admin)
+// 4. POST Add New Product
 app.post('/api/admin/products', async (req, res) => {
   try {
     const { 
@@ -76,7 +83,7 @@ app.post('/api/admin/products', async (req, res) => {
   }
 });
 
-// 5. PUT Update Product Details / Stock (Admin CRUD)
+// 5. PUT Update Product Details / Stock
 app.put('/api/admin/products/:id', async (req, res) => {
   const { id } = req.params;
   const { title, category, price_per_kg, cost_price_per_kg, stock_kg } = req.body;
@@ -96,7 +103,7 @@ app.put('/api/admin/products/:id', async (req, res) => {
   }
 });
 
-// 6. DELETE Product (Admin CRUD)
+// 6. DELETE Product
 app.delete('/api/admin/products/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -109,7 +116,7 @@ app.delete('/api/admin/products/:id', async (req, res) => {
   }
 });
 
-// 7. POST Create Order & Automatically Deduct Stock (Customer Checkout)
+// 7. POST Create Order
 app.post('/api/orders', async (req, res) => {
   const { customer_name, customer_phone, delivery_address, total_amount, items } = req.body;
   try {
@@ -120,7 +127,6 @@ app.post('/api/orders', async (req, res) => {
     const orderId = orderResult.insertId;
 
     for (let item of items) {
-      // Get product cost price snapshot
       const [prod] = await db.query('SELECT cost_price_per_kg FROM products WHERE id = ?', [item.product_id]);
       const costPrice = prod[0]?.cost_price_per_kg || 0;
 
@@ -129,7 +135,6 @@ app.post('/api/orders', async (req, res) => {
         [orderId, item.product_id, item.weight_kg, costPrice, item.subtotal]
       );
 
-      // Deduct stock
       await db.query(
         'UPDATE products SET stock_kg = stock_kg - ? WHERE id = ?',
         [item.weight_kg, item.product_id]
@@ -142,7 +147,7 @@ app.post('/api/orders', async (req, res) => {
   }
 });
 
-// 8. GET All Orders (For Admin Dashboard Sales Table)
+// 8. GET All Orders
 app.get('/api/admin/orders', async (req, res) => {
   try {
     const query = `
@@ -220,7 +225,7 @@ app.post('/api/feedback', async (req, res) => {
   }
 });
 
-// GET all feedback for Admin
+// GET all feedback
 app.get('/api/admin/feedback', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM feedback ORDER BY created_at DESC');
@@ -240,7 +245,7 @@ app.delete('/api/admin/feedback/:id', async (req, res) => {
   }
 });
 
-// 🛠️ PUT Update Order Status (Updated validation without 'Processing')
+// PUT Update Order Status
 app.put('/api/admin/orders/:id/status', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -258,10 +263,9 @@ app.put('/api/admin/orders/:id/status', async (req, res) => {
   }
 });
 
-// 11. GET Profit Analytics for Admin Dashboard
+// 11. GET Profit Analytics
 app.get('/api/admin/analytics/profit-details', async (req, res) => {
   try {
-    // 1. Time-based profit totals (STRICTLY DELIVERED ORDERS ONLY)
     const summaryQuery = `
       SELECT 
         COALESCE(SUM(CASE WHEN DATE(o.created_at) = CURDATE() THEN oi.subtotal ELSE 0 END), 0) AS daily_revenue,
@@ -280,7 +284,6 @@ app.get('/api/admin/analytics/profit-details', async (req, res) => {
       WHERE o.status = 'Delivered'
     `;
 
-    // 2. Per-product breakdown (STRICTLY DELIVERED ORDERS ONLY)
     const productQuery = `
       SELECT 
         p.id AS product_id,

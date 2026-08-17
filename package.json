@@ -2,7 +2,7 @@
   "name": "quetta-dryfruits",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -10,8 +10,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+    "@google/genai": "^2.17.1",
     "axios": "^1.19.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
