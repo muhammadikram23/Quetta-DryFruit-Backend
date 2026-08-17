@@ -192,7 +192,7 @@ app.get('/api/admin/orders', async (req, res) => {
 app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
   
-  if (username === 'admin' && password === 'quetta123') {
+  if (username === 'admin' && password === 'admin123') {
     res.json({ success: true, token: 'admin-secret-token-123', message: 'Login successful' });
   } else {
     res.status(401).json({ success: false, error: 'Invalid admin credentials' });
