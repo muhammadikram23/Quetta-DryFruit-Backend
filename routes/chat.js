@@ -20,70 +20,107 @@ Guidelines:
 - Keep responses concise, clear, and focused on helping customers.
 `;
 
+// 🔍 Helper Endpoint: Check available models for your API Key
+router.get('/models', async (req, res) => {
+  try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: 'GEMINI_API_KEY is not set in environment variables.' });
+    }
+
+    const response = await axios.get(
+      `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
+    );
+
+    // Extract model names for clean reading
+    const availableModels = response.data?.models?.map(m => m.name.replace('models/', '')) || [];
+
+    return res.json({
+      status: 'success',
+      totalModels: availableModels.length,
+      models: availableModels
+    });
+  } catch (error) {
+    const errData = error.response?.data || error.message;
+    console.error('Failed to fetch available models:', errData);
+    return res.status(error.response?.status || 500).json({
+      error: 'Failed to retrieve available models for this API key.',
+      details: errData
+    });
+  }
+});
+
+// 💬 Chat Endpoint with Fallback & Detailed Diagnostic Errors
 router.post('/chat', async (req, res) => {
-    try {
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) {
-            console.error('GEMINI_API_KEY Missing!');
-            return res.status(500).json({ error: 'Server configuration error: GEMINI_API_KEY missing.' });
-        }
+  try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({
+        error: 'Missing API Key',
+        message: 'GEMINI_API_KEY is not configured on the Vercel server environment.'
+      });
+    }
 
-        const { message, conversationHistory } = req.body;
+    const { message, conversationHistory } = req.body;
 
-        if (!message || typeof message !== 'string') {
-            return res.status(400).json({ error: 'A valid user message string is required.' });
-        }
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Validation Error', message: 'Message string is required.' });
+    }
 
-        // Format conversation history
-        const formattedHistory = Array.isArray(conversationHistory)
-            ? conversationHistory.map((item) => ({
-                role: item.role === 'model' ? 'model' : 'user',
-                parts: [{ text: item.text || item.parts?.[0]?.text || '' }],
-            }))
-            : [];
+    const formattedHistory = Array.isArray(conversationHistory)
+      ? conversationHistory.map((item) => ({
+          role: item.role === 'model' ? 'model' : 'user',
+          parts: [{ text: item.text || item.parts?.[0]?.text || '' }],
+        }))
+      : [];
 
-        const contents = [
-            ...formattedHistory,
-            { role: 'user', parts: [{ text: message }] }
-        ];
+    const contents = [
+      ...formattedHistory,
+      { role: 'user', parts: [{ text: message }] }
+    ];
 
-        // REST API Endpoint call
-        const endpoint =
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // Priority model list
+    const candidateModels = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash'];
+    let lastError = null;
 
+    for (const model of candidateModels) {
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        
         const apiResponse = await axios.post(
-            endpoint,
-            {
-                systemInstruction: {
-                    parts: [{ text: STORE_SYSTEM_INSTRUCTION }]
-                },
-                contents: contents,
-                generationConfig: {
-                    temperature: 0.7
-                }
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
+          endpoint,
+          {
+            systemInstruction: { parts: [{ text: STORE_SYSTEM_INSTRUCTION }] },
+            contents: contents,
+            generationConfig: { temperature: 0.7 }
+          },
+          { headers: { 'Content-Type': 'application/json' }, timeout: 10000 }
         );
 
-        const reply =
-            apiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-            "Maazrat! System is unable to respond at this time.";
-
-        return res.json({ reply });
-
-    } catch (error) {
-        const errorDetails = error.response?.data || error.message;
-        console.error('Gemini REST API Error:', JSON.stringify(errorDetails));
-
-        return res.status(500).json({
-            error: 'Failed to process request with AI.',
-            details: errorDetails
-        });
+        const reply = apiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (reply) {
+          return res.json({ reply, modelUsed: model });
+        }
+      } catch (err) {
+        lastError = err.response?.data || err.message;
+        console.warn(`Model ${model} failed:`, JSON.stringify(lastError));
+      }
     }
+
+    // If all model attempts failed, return detailed diagnostic JSON
+    return res.status(500).json({
+      error: 'AI Generation Failed',
+      message: 'All candidate Gemini models returned an error.',
+      rootCause: lastError
+    });
+
+  } catch (error) {
+    console.error('Unhandled Chat Server Error:', error);
+    return res.status(500).json({
+      error: 'Internal Server Error',
+      details: error.message
+    });
+  }
 });
 
 module.exports = router;
