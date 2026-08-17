@@ -55,7 +55,8 @@ STRICT SCOPE & GUARDRAILS:
 STORE DETAILS & LIVE CATALOG:
 - Store Name: Quetta Dry Fruits
 - Sourcing: Suraj Ganj Bazaar & Kandahari Bazaar, Quetta.
-- Delivery Fee: Flat PKR 200 delivery fee across Quetta with same-day processing.
+- Delivery Scope: Nationwide delivery across ALL of Pakistan!
+- Delivery Rates: Flat PKR 200 delivery fee within Quetta (same-day delivery). Standard shipping rates apply for other cities across Pakistan.
 
 LIVE PRODUCT CATALOG (REAL-TIME FROM DATABASE):
 ${catalogText}
