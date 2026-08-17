@@ -78,19 +78,20 @@ router.post('/', async (req, res) => {
       { role: 'user', parts: [{ text: message }] }
     ];
 
-    // Supported models verified directly from your API key response
+    // Priority list of standard active models
     const candidateModels = [
       'gemini-2.5-flash',
-      'gemini-flash-latest',
-      'gemini-2.5-pro',
-      'gemini-pro-latest'
+      'gemini-1.5-flash',
+      'gemini-flash-latest'
     ];
+
     let lastError = null;
+    let isQuotaExceeded = false;
 
     for (const model of candidateModels) {
       try {
         const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-        
+
         const apiResponse = await axios.post(
           endpoint,
           {
@@ -107,8 +108,22 @@ router.post('/', async (req, res) => {
         }
       } catch (err) {
         lastError = err.response?.data || err.message;
-        console.warn(`Model ${model} failed:`, JSON.stringify(lastError));
+        const statusCode = err.response?.status;
+
+        if (statusCode === 429) {
+          isQuotaExceeded = true;
+          console.warn(`Quota limit reached (429) for model ${model}.`);
+        } else {
+          console.warn(`Model ${model} failed with status ${statusCode}:`, JSON.stringify(lastError));
+        }
       }
+    }
+
+    if (isQuotaExceeded) {
+      return res.status(429).json({
+        error: 'Quota Exceeded',
+        message: 'API rate limit or daily quota reached. Please wait a moment or update your Google Gemini API key.'
+      });
     }
 
     return res.status(500).json({
