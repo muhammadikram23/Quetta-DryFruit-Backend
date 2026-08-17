@@ -24,17 +24,17 @@ router.post('/chat', async (req, res) => {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      console.error('GEMINI_API_KEY is missing.');
-      return res.status(500).json({ error: 'Missing GEMINI_API_KEY on server.' });
+      console.error('GEMINI_API_KEY Missing!');
+      return res.status(500).json({ error: 'Server configuration error: GEMINI_API_KEY missing.' });
     }
 
     const { message, conversationHistory } = req.body;
 
     if (!message || typeof message !== 'string') {
-      return res.status(400).json({ error: 'Valid user message required.' });
+      return res.status(400).json({ error: 'A valid user message string is required.' });
     }
 
-    // Format conversation history for Gemini API
+    // Format conversation history
     const formattedHistory = Array.isArray(conversationHistory)
       ? conversationHistory.map((item) => ({
           role: item.role === 'model' ? 'model' : 'user',
@@ -47,11 +47,11 @@ router.post('/chat', async (req, res) => {
       { role: 'user', parts: [{ text: message }] }
     ];
 
-    // Direct HTTP Request to Gemini v1beta API (No SDK reliance)
-    const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // REST API Endpoint call
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const apiResponse = await axios.post(
-      geminiEndpoint,
+      endpoint,
       {
         systemInstruction: {
           parts: [{ text: STORE_SYSTEM_INSTRUCTION }]
@@ -62,23 +62,23 @@ router.post('/chat', async (req, res) => {
         }
       },
       {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' }
       }
     );
 
     const reply =
       apiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "I'm sorry, I couldn't generate a response right now.";
+      "Maazrat! System is unable to respond at this time.";
 
     return res.json({ reply });
 
   } catch (error) {
-    console.error('Gemini Direct API Error:', error.response?.data || error.message);
+    const errorDetails = error.response?.data || error.message;
+    console.error('Gemini REST API Error:', JSON.stringify(errorDetails));
+
     return res.status(500).json({
       error: 'Failed to process request with AI.',
-      details: error.response?.data?.error?.message || error.message
+      details: errorDetails
     });
   }
 });
