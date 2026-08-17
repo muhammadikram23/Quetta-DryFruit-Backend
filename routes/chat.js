@@ -21,66 +21,69 @@ Guidelines:
 `;
 
 router.post('/chat', async (req, res) => {
-  try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      console.error('GEMINI_API_KEY Missing!');
-      return res.status(500).json({ error: 'Server configuration error: GEMINI_API_KEY missing.' });
-    }
-
-    const { message, conversationHistory } = req.body;
-
-    if (!message || typeof message !== 'string') {
-      return res.status(400).json({ error: 'A valid user message string is required.' });
-    }
-
-    // Format conversation history
-    const formattedHistory = Array.isArray(conversationHistory)
-      ? conversationHistory.map((item) => ({
-          role: item.role === 'model' ? 'model' : 'user',
-          parts: [{ text: item.text || item.parts?.[0]?.text || '' }],
-        }))
-      : [];
-
-    const contents = [
-      ...formattedHistory,
-      { role: 'user', parts: [{ text: message }] }
-    ];
-
-    // REST API Endpoint call
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-    const apiResponse = await axios.post(
-      endpoint,
-      {
-        systemInstruction: {
-          parts: [{ text: STORE_SYSTEM_INSTRUCTION }]
-        },
-        contents: contents,
-        generationConfig: {
-          temperature: 0.7
+    try {
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            console.error('GEMINI_API_KEY Missing!');
+            return res.status(500).json({ error: 'Server configuration error: GEMINI_API_KEY missing.' });
         }
-      },
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
-    );
 
-    const reply =
-      apiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "Maazrat! System is unable to respond at this time.";
+        const { message, conversationHistory } = req.body;
 
-    return res.json({ reply });
+        if (!message || typeof message !== 'string') {
+            return res.status(400).json({ error: 'A valid user message string is required.' });
+        }
 
-  } catch (error) {
-    const errorDetails = error.response?.data || error.message;
-    console.error('Gemini REST API Error:', JSON.stringify(errorDetails));
+        // Format conversation history
+        const formattedHistory = Array.isArray(conversationHistory)
+            ? conversationHistory.map((item) => ({
+                role: item.role === 'model' ? 'model' : 'user',
+                parts: [{ text: item.text || item.parts?.[0]?.text || '' }],
+            }))
+            : [];
 
-    return res.status(500).json({
-      error: 'Failed to process request with AI.',
-      details: errorDetails
-    });
-  }
+        const contents = [
+            ...formattedHistory,
+            { role: 'user', parts: [{ text: message }] }
+        ];
+
+        // REST API Endpoint call
+        const endpoint =
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+        const apiResponse = await axios.post(
+            endpoint,
+            {
+                systemInstruction: {
+                    parts: [{ text: STORE_SYSTEM_INSTRUCTION }]
+                },
+                contents: contents,
+                generationConfig: {
+                    temperature: 0.7
+                }
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        const reply =
+            apiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+            "Maazrat! System is unable to respond at this time.";
+
+        return res.json({ reply });
+
+    } catch (error) {
+        const errorDetails = error.response?.data || error.message;
+        console.error('Gemini REST API Error:', JSON.stringify(errorDetails));
+
+        return res.status(500).json({
+            error: 'Failed to process request with AI.',
+            details: errorDetails
+        });
+    }
 });
 
 module.exports = router;
