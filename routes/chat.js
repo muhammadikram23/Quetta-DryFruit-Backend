@@ -20,19 +20,18 @@ Guidelines:
 - Keep responses concise, clear, and focused on helping customers.
 `;
 
-// 🔍 Helper Endpoint: Check available models for your API Key
+// 🔍 GET /api/chat/models
 router.get('/models', async (req, res) => {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({ error: 'GEMINI_API_KEY is not set in environment variables.' });
+      return res.status(500).json({ error: 'GEMINI_API_KEY environment variable is missing.' });
     }
 
     const response = await axios.get(
       `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
     );
 
-    // Extract model names for clean reading
     const availableModels = response.data?.models?.map(m => m.name.replace('models/', '')) || [];
 
     return res.json({
@@ -42,22 +41,22 @@ router.get('/models', async (req, res) => {
     });
   } catch (error) {
     const errData = error.response?.data || error.message;
-    console.error('Failed to fetch available models:', errData);
+    console.error('Failed to fetch models:', errData);
     return res.status(error.response?.status || 500).json({
-      error: 'Failed to retrieve available models for this API key.',
+      error: 'Failed to retrieve models for this API key.',
       details: errData
     });
   }
 });
 
-// 💬 Chat Endpoint with Fallback & Detailed Diagnostic Errors
-router.post('/chat', async (req, res) => {
+// 💬 POST /api/chat
+router.post('/', async (req, res) => {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return res.status(500).json({
         error: 'Missing API Key',
-        message: 'GEMINI_API_KEY is not configured on the Vercel server environment.'
+        message: 'GEMINI_API_KEY is not set on Vercel environment variables.'
       });
     }
 
@@ -79,7 +78,6 @@ router.post('/chat', async (req, res) => {
       { role: 'user', parts: [{ text: message }] }
     ];
 
-    // Priority model list
     const candidateModels = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash'];
     let lastError = null;
 
@@ -107,15 +105,14 @@ router.post('/chat', async (req, res) => {
       }
     }
 
-    // If all model attempts failed, return detailed diagnostic JSON
     return res.status(500).json({
       error: 'AI Generation Failed',
-      message: 'All candidate Gemini models returned an error.',
+      message: 'All Gemini candidate models returned an error.',
       rootCause: lastError
     });
 
   } catch (error) {
-    console.error('Unhandled Chat Server Error:', error);
+    console.error('Unhandled Chat Error:', error);
     return res.status(500).json({
       error: 'Internal Server Error',
       details: error.message

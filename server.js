@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // Register Chat Router
-app.use('/api', chatRouter);
+app.use('/api/chat', chatRouter);
 
 // 1. GET all products
 app.get('/api/products', async (req, res) => {
