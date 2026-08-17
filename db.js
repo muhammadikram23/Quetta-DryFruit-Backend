@@ -9,17 +9,10 @@ const pool = mysql.createPool({
   port: process.env.MYSQLPORT || process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
-});
-
-// Test Database Connection
-pool.getConnection((err, connection) => {
-  if (err) {
-    console.error('Database connection failed:', err.message);
-  } else {
-    console.log('Successfully connected to MySQL Database!');
-    connection.release();
-  }
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
+  connectTimeout: 10000 // 10 seconds connection timeout limit
 });
 
 module.exports = pool.promise();
