@@ -1,6 +1,5 @@
 const express = require('express');
-const { GoogleGenAI } = require('@google/genai');
-
+const axios = require('axios');
 const router = express.Router();
 
 const STORE_SYSTEM_INSTRUCTION = `
@@ -26,16 +25,16 @@ router.post('/chat', async (req, res) => {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       console.error('GEMINI_API_KEY is missing.');
-      return res.status(500).json({ error: 'Missing GEMINI_API_KEY' });
+      return res.status(500).json({ error: 'Missing GEMINI_API_KEY on server.' });
     }
 
-    const ai = new GoogleGenAI({ apiKey });
     const { message, conversationHistory } = req.body;
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({ error: 'Valid user message required.' });
     }
 
+    // Format conversation history for Gemini API
     const formattedHistory = Array.isArray(conversationHistory)
       ? conversationHistory.map((item) => ({
           role: item.role === 'model' ? 'model' : 'user',
@@ -48,22 +47,39 @@ router.post('/chat', async (req, res) => {
       { role: 'user', parts: [{ text: message }] }
     ];
 
-    // 🟢 Using gemini-1.5-flash model
-    const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
-      contents: contents,
-      config: {
-        systemInstruction: STORE_SYSTEM_INSTRUCTION,
-        temperature: 0.7,
-      },
-    });
+    // Direct HTTP Request to Gemini v1beta API (No SDK reliance)
+    const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
-    const reply = response.text || "I'm sorry, I couldn't generate a response.";
+    const apiResponse = await axios.post(
+      geminiEndpoint,
+      {
+        systemInstruction: {
+          parts: [{ text: STORE_SYSTEM_INSTRUCTION }]
+        },
+        contents: contents,
+        generationConfig: {
+          temperature: 0.7
+        }
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const reply =
+      apiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "I'm sorry, I couldn't generate a response right now.";
+
     return res.json({ reply });
 
   } catch (error) {
-    console.error('Gemini API Error details:', error);
-    return res.status(500).json({ error: 'Failed to process request with AI.', details: error.message });
+    console.error('Gemini Direct API Error:', error.response?.data || error.message);
+    return res.status(500).json({
+      error: 'Failed to process request with AI.',
+      details: error.response?.data?.error?.message || error.message
+    });
   }
 });
 
