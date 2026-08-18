@@ -102,6 +102,21 @@ The primary goals of this project are to demonstrate practical implementation of
 * Store purchase records
 * Manage order-related data
 
+### 🤖 AI Chatbot Assistant
+
+* AI-powered "Quetta Dry Fruits AI Assistant" for customer support and product assistance
+* Powered by the Google Gemini API
+* Fetches live product information directly from the MySQL database
+* Provides real-time product prices, categories, and stock availability
+* Supports questions about products, live prices, stock availability, shipping rates, order process, store policies, and dry-fruit health benefits
+* Responds in simple English, Urdu, or Roman Urdu based on the user's language preference
+* Maintains conversation history for contextual responses
+* Uses multiple Gemini candidate models with automatic fallback when a model fails
+* Uses a dynamic system instruction based on the latest product catalog
+* Includes input validation and API error handling
+* Provides a model availability endpoint through `/api/chat/models`
+* Provides the main chatbot endpoint through `POST /api/chat`
+
 ### 🗄️ Database Management
 
 * MySQL relational database
