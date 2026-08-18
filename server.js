@@ -266,6 +266,17 @@ app.put('/api/admin/orders/:id/status', async (req, res) => {
 // 11. GET Profit Analytics
 app.get('/api/admin/analytics/profit-details', async (req, res) => {
   try {
+    const timeframe = req.query.timeframe || 'all';
+
+    let dateFilter = '';
+    
+    if (timeframe === 'daily') {
+      dateFilter = "AND DATE(o.created_at) = CURDATE()";
+    } else if (timeframe === 'weekly') {
+      dateFilter = "AND YEARWEEK(o.created_at, 1) = YEARWEEK(CURDATE(), 1)";
+    } else if (timeframe === 'monthly') {
+      dateFilter = "AND YEAR(o.created_at) = YEAR(CURDATE()) AND MONTH(o.created_at) = MONTH(CURDATE())";
+    }
     const summaryQuery = `
       SELECT 
         COALESCE(SUM(CASE WHEN DATE(o.created_at) = CURDATE() THEN oi.subtotal ELSE 0 END), 0) AS daily_revenue,
@@ -291,15 +302,12 @@ app.get('/api/admin/analytics/profit-details', async (req, res) => {
         p.category,
         COALESCE(SUM(oi.weight_kg), 0) AS total_kg_sold,
         COALESCE(SUM(oi.subtotal), 0) AS total_revenue,
-        COALESCE(SUM(oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))), 0) AS product_net_profit,
-        
-        COALESCE(SUM(CASE WHEN DATE(o.created_at) = CURDATE() THEN (oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))) ELSE 0 END), 0) AS daily_profit,
-        COALESCE(SUM(CASE WHEN YEARWEEK(o.created_at, 1) = YEARWEEK(CURDATE(), 1) THEN (oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))) ELSE 0 END), 0) AS weekly_profit,
-        COALESCE(SUM(CASE WHEN YEAR(o.created_at) = YEAR(CURDATE()) AND MONTH(o.created_at) = MONTH(CURDATE()) THEN (oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))) ELSE 0 END), 0) AS monthly_profit
+        COALESCE(SUM(oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))), 0) AS product_net_profit
       FROM products p
       INNER JOIN order_items oi ON p.id = oi.product_id
       INNER JOIN orders o ON oi.order_id = o.id
-      WHERE o.status = 'Delivered'
+      WHERE o.status = 'Delivered' 
+      ${dateFilter}
       GROUP BY p.id, p.title, p.category
       ORDER BY product_net_profit DESC
     `;
