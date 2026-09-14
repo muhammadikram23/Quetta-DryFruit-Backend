@@ -288,6 +288,8 @@ app.get('/api/admin/analytics/profit-details', async (req, res) => {
         COALESCE(SUM(CASE WHEN YEAR(o.created_at) = YEAR(CURDATE()) AND MONTH(o.created_at) = MONTH(CURDATE()) THEN oi.subtotal ELSE 0 END), 0) AS monthly_revenue,
         COALESCE(SUM(CASE WHEN YEAR(o.created_at) = YEAR(CURDATE()) AND MONTH(o.created_at) = MONTH(CURDATE()) THEN (oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))) ELSE 0 END), 0) AS monthly_profit,
         
+        COALESCE(SUM(oi.subtotal), 0) AS lifetime_revenue,
+        COALESCE(SUM(oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))), 0) AS lifetime_profit,
         COALESCE(SUM(oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))), 0) AS total_lifetime_profit
       FROM order_items oi
       JOIN orders o ON oi.order_id = o.id
@@ -318,6 +320,28 @@ app.get('/api/admin/analytics/profit-details', async (req, res) => {
     res.json({ summary: summary || {}, products: products || [] });
   } catch (err) {
     console.error('Profit Analytics Error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 12. GET Lifetime Profit Analytics
+app.get('/api/admin/analytics/lifetime-profit', async (req, res) => {
+  try {
+    const summaryQuery = `
+      SELECT 
+        COALESCE(SUM(oi.subtotal), 0) AS lifetime_revenue,
+        COALESCE(SUM(oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))), 0) AS lifetime_profit,
+        COALESCE(SUM(oi.subtotal - (oi.weight_kg * COALESCE(oi.cost_price_per_kg, p.cost_price_per_kg, 0))), 0) AS total_lifetime_profit
+      FROM order_items oi
+      JOIN orders o ON oi.order_id = o.id
+      JOIN products p ON oi.product_id = p.id
+      WHERE o.status = 'Delivered'
+    `;
+
+    const [[result]] = await db.query(summaryQuery);
+    res.json(result || { lifetime_revenue: 0, lifetime_profit: 0, total_lifetime_profit: 0 });
+  } catch (err) {
+    console.error('Lifetime Profit Error:', err);
     res.status(500).json({ error: err.message });
   }
 });
