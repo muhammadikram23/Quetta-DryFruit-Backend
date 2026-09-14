@@ -322,6 +322,15 @@ app.get('/api/admin/analytics/profit-details', async (req, res) => {
   }
 });
 
+app.get('/api/test-db', async (req, res) => {
+  try {
+    const [results] = await db.query('SELECT * FROM feedback LIMIT 2');
+    res.json({ success: true, message: "Database is fully connected!", data: results });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Start Server
 const PORT = process.env.PORT || 5000;
 
